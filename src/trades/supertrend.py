@@ -14,7 +14,7 @@ import numpy as np
 from datetime import datetime
 import math
 import psycopg2
-
+import pandas_ta as ta
 def supertrend(df, atr_period, multiplier):
     
     high = df['High']
@@ -80,21 +80,35 @@ def supertrend(df, atr_period, multiplier):
 
 
 if __name__ == "__main__":    
-	atr_period = 5
-	atr_multiplier = 1.0
-	params = config()
-		# high_low = config(section = 'high_low')
-		# connect to the PostgreSQL serve
-	connection = psycopg2.connect(**params)
-	connection.autocommit = True
+    atr_period = 10
+    atr_multiplier = 1.0
+    # params = config()
+    # 	# high_low = config(section = 'high_low')
+    # 	# connect to the PostgreSQL serve
+    # connection = psycopg2.connect(**params)
+    # connection.autocommit = True
 
-		# cursor object for database
-	cursor = connection.cursor()
-	query = 'SELECT * FROM banknifty_cleaned WHERE instrument_token = \'17385986\' ORDER BY date_time ASC'
-	cursor.execute(query)
-	data = cursor.fetchall()
+    # 	# cursor object for database
+    # cursor = connection.cursor()
+    # query = 'SELECT * FROM banknifty_cleaned WHERE instrument_token = \'17385986\' ORDER BY date_time ASC'
+    # cursor.execute(query)
+    # data = cursor.fetchall()
 
-	columns = ['instrument_token','Datetime','Close','High','Low','row_number']
-	data = pd.DataFrame(data, columns = columns)
-	
+    # columns = ['instrument_token','Datetime','Close','High','Low','row_number']
+    # data = pd.DataFrame(data, columns = columns)
+ 
+    columns = ['index','instrument_token', 'date_time', 'Close', 'High', 'Low']
+    extract_1 = pd.read_csv("G:\DS - Competitions and projects\Supertrend_strategy_v1\Supertrend\extract1.csv"  )
+    extract_1.columns = columns
+    extract_1 = extract_1.iloc[::-1]
+    
+    sti = ta.supertrend(extract_1['High'], extract_1['Low'],extract_1['Close'], 10 ,1)
+    sti.columns = ['value_req', 'ne', 'nee' , 'mee']
+    sti['date_time'] = extract_1.date_time
+    print(sti['value_req'].tolist()[-1])
+    # sti.to_csv('supertrend_ta.csv')
+    # supertrend_val = supertrend(extract_1, 10, 1)
+    # print(supertrend_val)
+    # supertrend_val.to_csv('supertrend_3.csv')
+    
 

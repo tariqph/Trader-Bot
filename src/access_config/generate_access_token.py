@@ -29,12 +29,23 @@ except Exception as e:
 # os.path.abspath(os.path.join(os.path.dirname(__file__), "..","..","database_hemant.ini"))]
 
 filenames = [os.path.abspath(os.path.join(os.path.dirname(__file__),"..",
-                                 "..",config['access_files']['api_three']))]
-auth_type = ['totp']
+                                 "..",config['access_files']['api_one'])),
+             os.path.abspath(os.path.join(os.path.dirname(__file__),"..",
+                                 "..",config['access_files']['api_two'])),
+             os.path.abspath(os.path.join(os.path.dirname(__file__),"..",
+                                 "..",config['access_files']['api_four']))]
+auth_type = ['totp','totp','totp']
 section = 'zerodha'
 print("generating tokens")
+count = 0
 for filename , type in zip(filenames,auth_type):
-   
+    print(count)
+    # if count < 2:
+    #     count+=1
+    #     print(count)
+    #     continue
+        
+    
     url = config['zerodha']['kite_trade_url'] 
     parser = ConfigParser()
     # read config file
@@ -49,10 +60,10 @@ for filename , type in zip(filenames,auth_type):
 
     # print(url + db['api_key'])
     url = url + db['api_key']
-
+    print(url)
     options = Options()
-    options.headless = True
-    # options.headless = False
+    # options.headless = True
+    options.headless = False
     
     driver = webdriver.Chrome(options=options)
     driver.get(url) 
@@ -71,9 +82,9 @@ for filename , type in zip(filenames,auth_type):
     time.sleep(2)
 
     # print(db['totp_key'])
-    
+    print(db['totp_key'])
     totp = pyotp.TOTP(db['totp_key'])
-
+    print(totp.now())
     pin_user = db['pin']
     if(type == 'totp'):
         pin = driver.find_element_by_id('totp')
@@ -87,7 +98,7 @@ for filename , type in zip(filenames,auth_type):
     print(totp.now())
     print(pin_user)
     
-    pin.send_keys(pin_user)
+    # pin.send_keys(pin_user)
     cont.click()
 
     time.sleep(2)

@@ -1,7 +1,9 @@
 supertrend_env/
 
 database_pettem.ini
-
+database_amit.ini
+database_hemant.ini
+database.ini
 logs/
 
 rabbitmqadmin
@@ -23,3 +25,5 @@ src/access_config/__pycache__
 
 test.csv
 temp_cache/
+
+*.csv

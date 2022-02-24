@@ -5,6 +5,8 @@ access_files:
   api_one: database.ini
   api_two: database_hemant.ini
   api_three: database_pettem.ini
+  api_four: database_amit.ini
+
 
 # Input File location
 input_files:
