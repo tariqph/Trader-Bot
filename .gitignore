@@ -9,7 +9,7 @@ database_rupinder.ini
 database.ini
 logs/
 test.ini
-
+db.in
 # RabbitMQ admin
 rabbitmqadmin
 
@@ -27,10 +27,13 @@ src/publish_database/__pycache__
 src/publish_database/db.sqlite3
 
 src/access_config/__pycache__
-
 test.csv
 temp_cache/
 
 database.env
 test_files/
+
+# Trade strategy script
+src/trades/strategy.py
+
 *.csv

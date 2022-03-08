@@ -43,7 +43,7 @@ def trade_strategy(tradefile,tradefile_parser, parser, next, query_cursor, optio
     date_time.append(next[str(option_token)][timestamp_string])
     
     df = pd.DataFrame({'High':high,'Low':low,'Close':close,'Datetime':date_time})
-    
+  
     # Get the supertrend Indicator
     # sti = supertrend(df,10,1)
     
