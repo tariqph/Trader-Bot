@@ -27,8 +27,6 @@ postgres_insert_query = f""" INSERT INTO {tablename} (instrument_token,date_time
                             ltp, high, low) 
                             VALUES (%s,%s,%s,%s,%s)"""
 
-# import pandas as pd 
-# data = pd.read_csv("/home/narayana_tariq/Zerodha/Supertrend_strat/test.csv")
 
 for index, row in df.iterrows():
     record_to_insert = (row['instrument_token'],row['date_time'], row['Close'],

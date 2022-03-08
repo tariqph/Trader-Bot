@@ -1,21 +1,6 @@
 # Virtual Environment
 supertrend_env/
 
-# Credentials
-database_pettem.ini
-database_amit.ini
-database_hemant.ini
-database_rupinder.ini
-database.ini
-logs/
-test.ini
-
-# RabbitMQ admin
-rabbitmqadmin
-
-
-.vscode/
-
 # Test scripts and files
 src/trades/zerodha.py
 src/ticker/banknifty_conn_test.py
@@ -30,7 +15,3 @@ src/access_config/__pycache__
 
 test.csv
 temp_cache/
-
-database.env
-test_files/
-*.csv

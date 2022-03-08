@@ -78,35 +78,59 @@ def supertrend(df, atr_period, multiplier):
     }, index=df.index)
     
 
+import os
+import glob
 
 if __name__ == "__main__":    
     atr_period = 10
     atr_multiplier = 1.0
-    # params = config()
-    # 	# high_low = config(section = 'high_low')
-    # 	# connect to the PostgreSQL serve
-    # connection = psycopg2.connect(**params)
-    # connection.autocommit = True
-
-    # 	# cursor object for database
-    # cursor = connection.cursor()
-    # query = 'SELECT * FROM banknifty_cleaned WHERE instrument_token = \'17385986\' ORDER BY date_time ASC'
-    # cursor.execute(query)
-    # data = cursor.fetchall()
-
-    # columns = ['instrument_token','Datetime','Close','High','Low','row_number']
-    # data = pd.DataFrame(data, columns = columns)
- 
-    columns = ['index','instrument_token', 'date_time', 'Close', 'High', 'Low']
-    extract_1 = pd.read_csv("G:\DS - Competitions and projects\Supertrend_strategy_v1\Supertrend\extract1.csv"  )
-    extract_1.columns = columns
-    extract_1 = extract_1.iloc[::-1]
     
-    sti = ta.supertrend(extract_1['High'], extract_1['Low'],extract_1['Close'], 10 ,1)
-    sti.columns = ['value_req', 'ne', 'nee' , 'mee']
-    sti['date_time'] = extract_1.date_time
-    print(sti['value_req'].tolist()[-1])
-    # sti.to_csv('supertrend_ta.csv')
+
+    path = "G:\DS - Competitions and projects\Supertrend_strategy_v1\Supertrend\\test_files/*.csv"
+    
+    files = []
+    for fname in glob.glob(path):
+        files.append(fname)
+    
+    print(files)
+    # path = 'c:\\'
+    path = "G:\DS - Competitions and projects\Supertrend_strategy_v1\Supertrend\\test_files"
+    
+    extension = 'csv'
+    os.chdir(path)
+    filenames = glob.glob('*.{}'.format(extension))
+    # result = [i.replace('.csv','') for i in result]
+    # print(result)
+    
+    # exit()
+    windows = [20,30,50,100]
+    
+    for window in windows:
+        for file,filename in zip(files,filenames):
+            columns = ['index','instrument_token', 'date_time', 'Close', 'High', 'Low']
+            extract_1 = pd.read_csv(file)
+            # print(extract_1.shape[0])
+            # exit()
+            extract_1.columns = columns
+    # print(extract_1.iloc[0:20])
+            date_time = []
+            supertrend_values = []
+            for i in range(extract_1.shape[0] - window - 1):
+        
+                extract_window = extract_1.iloc[::-1]
+                extract_window = extract_window.iloc[i:window+i]
+                
+                # print(extract_1)
+                sti = ta.supertrend(extract_window['High'], extract_window['Low'],extract_window['Close'], 10 ,1)
+                sti.columns = ['value_req', 'ne', 'nee' , 'mee']
+                sti['date_time'] = extract_window.date_time
+                date_time.append(sti['date_time'].tolist()[-1])
+                supertrend_values.append(sti['value_req'].tolist()[-1])
+                # print(sti['date_time'].tolist()[-1],sti['value_req'].tolist()[-1])
+            
+            df = pd.DataFrame({"Date_time":date_time,"Supertrend_value":supertrend_values})
+            df.to_csv(f"{path}/window_{str(window)}/{window}_{filename}" )
+    # sti.to_csv('supertrend_ta_test4.csv')
     # supertrend_val = supertrend(extract_1, 10, 1)
     # print(supertrend_val)
     # supertrend_val.to_csv('supertrend_3.csv')

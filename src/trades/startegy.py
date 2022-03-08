@@ -2,7 +2,7 @@ from supertrend import supertrend
 import pandas as pd
 from orders import place_order
 import datetime
-
+import pandas_ta as ta
 timestamp_string = 'exchange_timestamp'
 
 def trade_strategy(tradefile,tradefile_parser, parser, next, query_cursor, options_data):
@@ -45,14 +45,18 @@ def trade_strategy(tradefile,tradefile_parser, parser, next, query_cursor, optio
     df = pd.DataFrame({'High':high,'Low':low,'Close':close,'Datetime':date_time})
     
     # Get the supertrend Indicator
-    sti = supertrend(df,10,1)
+    # sti = supertrend(df,10,1)
     
-    trending = sti['Supertrend'].tolist()[-1]
+    sti = ta.supertrend(df['High'], df['Low'],df['Close'], 10 ,1)
+    # trending = sti['Supertrend'].tolist()[-1]
     
-    if(trending == True):
-        supertrend_value = sti['Final Lowerband'].tolist()[-1]
-    else:
-        supertrend_value = sti['Final Upperband'].tolist()[-1]
+    sti.columns = ['value_req', 'not_req', 'not_req1', 'not_req2']
+    supertrend_value = sti['value_req'].tolist()[-1]
+    
+    # if(trending == True):
+    #     supertrend_value = sti['Final Lowerband'].tolist()[-1]
+    # else:
+    #     supertrend_value = sti['Final Upperband'].tolist()[-1]
     
     if(option_price > supertrend_value):
         

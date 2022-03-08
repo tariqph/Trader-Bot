@@ -1,0 +1,35 @@
+version: "3.9"
+volumes:
+  test:
+    external: true
+  database-data:
+
+services:
+  chromedriver:
+    image: selenium/standalone-chrome
+    ports: 
+      - "4444:4444"
+  trader_bot:
+    build: .
+    # command: python ***.py
+    volumes:
+      - test:/app/Data
+    
+  rabbitmq3:
+      container_name: "rabbitmq"
+      image: rabbitmq:3.8-management-alpine
+      environment:
+          - RABBITMQ_DEFAULT_USER=myuser
+          - RABBITMQ_DEFAULT_PASS=mypassword
+      ports:
+          # AMQP protocol port
+          - '5671:5672'
+          # HTTP management UI
+          - '15671:15672'  
+
+  database:
+      image: "postgres"
+      env_file:
+        - database.env
+      volumes:
+        - database-data:/var/lib/postgresql/data/
